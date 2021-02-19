@@ -17,7 +17,7 @@ export default new Vuex.Store({
   actions: {
     getShowData: async context => {
       const res = await fetch(
-        "http://api.tvmaze.com/shows/530?embed[]=episodes&embed[]=seasons"
+        "https://api.tvmaze.com/shows/530?embed[]=episodes&embed[]=seasons"
       );
       const data = await res.json();
 
