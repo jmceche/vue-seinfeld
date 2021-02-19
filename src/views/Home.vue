@@ -1,18 +1,54 @@
 <template>
-  <div class="home">
-    <img alt="Vue logo" src="../assets/logo.png" />
-    <HelloWorld msg="Welcome to Your Vue.js App" />
-  </div>
+  <Layout v-if="showData">
+    <div class="container">
+      <div class="left">
+        <img
+          src="/Seinfeld_Serie_de_TV-842891056-large.jpg"
+          alt="seinfeld"
+          class="cover-image"
+        />
+      </div>
+      <div class="right">
+        <div v-html="showData.summary" class="show-overview"></div>
+        <SeasonsList :episodesData="episodesData" :seasonData="seasonData" />
+      </div>
+    </div>
+  </Layout>
 </template>
 
 <script>
-// @ is an alias to /src
-import HelloWorld from "@/components/HelloWorld.vue";
+import SeasonsList from "../components/SeasonsList.vue";
+import Layout from "../components/Layout.vue";
+import { mapState } from "vuex";
 
 export default {
+  components: { Layout, SeasonsList },
   name: "Home",
-  components: {
-    HelloWorld
+  computed: {
+    ...mapState(["showData", "seasonData", "episodesData"])
   }
 };
 </script>
+
+<style lang="scss">
+.container {
+  display: flex;
+  justify-content: center;
+  margin: 0 auto;
+}
+
+.left {
+  margin-right: 1rem;
+}
+
+.right {
+  flex: 1;
+}
+.show-overview {
+  margin: 2rem 0;
+}
+
+.cover-image {
+  max-width: 300px;
+}
+</style>
