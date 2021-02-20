@@ -2,6 +2,7 @@ import Vue from "vue";
 import VueRouter from "vue-router";
 import Home from "../views/Home.vue";
 import Details from "../views/Details.vue";
+import PageNotFound from "../views/PageNotFound.vue";
 
 Vue.use(VueRouter);
 
@@ -12,10 +13,19 @@ const routes = [
     component: Home
   },
   {
-    path: "/episodes/:id",
+    path: "/season/:se/episode/:ep",
     name: "Details",
     component: Details,
     props: true
+  },
+  {
+    path: "/not-found",
+    name: "NotFound",
+    component: PageNotFound
+  },
+  {
+    path: "*",
+    redirect: "/not-found"
   }
 ];
 

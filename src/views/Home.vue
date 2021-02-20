@@ -10,7 +10,7 @@
       </div>
       <div class="right">
         <div v-html="showData.summary" class="show-overview"></div>
-        <SeasonsList :episodesData="episodesData" :seasonData="seasonData" />
+        <SeasonsList />
       </div>
     </div>
   </Layout>
@@ -25,7 +25,7 @@ export default {
   components: { Layout, SeasonsList },
   name: "Home",
   computed: {
-    ...mapState(["showData", "seasonData", "episodesData"])
+    ...mapState(["showData"])
   }
 };
 </script>

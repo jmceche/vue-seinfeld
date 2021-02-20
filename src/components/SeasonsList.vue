@@ -1,19 +1,21 @@
 <template>
   <div class="season-list">
     <ul class="seasons-group">
-      <li v-for="season in numSeasons" :key="season">
+      <li v-for="season in getNumSeasons" :key="season">
         <button class="season-buttons" @click="() => (currentSeason = season)">
           S{{ season }}
         </button>
       </li>
     </ul>
     <h1 class="season-title">Season {{ currentSeason }}</h1>
-    <EpisodesList :seasonEpisodes="seasonEpisodes" />
+    <EpisodesList :seasonEpisodes="getSeasonEpisodes(currentSeason)" />
   </div>
 </template>
 
 <script>
 import EpisodesList from "./EpisodesList";
+import { mapGetters } from "vuex";
+
 export default {
   name: "SeasonsList",
   data() {
@@ -21,22 +23,16 @@ export default {
       currentSeason: 1
     };
   },
-  props: {
-    seasonData: Array,
-    episodesData: Array
-  },
   components: {
     EpisodesList
   },
   computed: {
-    numSeasons() {
-      return this.seasonData.length;
-    },
-    seasonEpisodes() {
-      return this.episodesData.filter(
-        episode => episode.season === this.currentSeason
-      );
-    }
+    ...mapGetters([
+      "getShowSeasons",
+      "getShowEpisodes",
+      "getNumSeasons",
+      "getSeasonEpisodes"
+    ])
   }
 };
 </script>

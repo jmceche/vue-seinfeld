@@ -5,7 +5,7 @@
         <router-link
           :to="{
             name: 'Details',
-            params: { id: episode.id }
+            params: { se: episode.season, ep: episode.number }
           }"
         >
           {{ episode.number }} - {{ episode.name }}

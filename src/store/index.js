@@ -5,14 +5,14 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
   state: {
-    showData: [],
-    seasonData: [],
-    episodesData: []
+    showData: null,
+    singleEpisode: null,
+    pageNotFound: false
   },
   mutations: {
     GET_SHOW_FULL_DATA: (state, payload) => (state.showData = payload),
-    GET_SEASON_DATA: (state, payload) => (state.seasonData = payload),
-    GET_EPISODES_DATA: (state, payload) => (state.episodesData = payload)
+    GET_SINGLE_EPISODE: (state, payload) => (state.singleEpisode = payload),
+    SHOW_404: state => (state.pageNotFound = true)
   },
   actions: {
     getShowData: async context => {
@@ -22,8 +22,38 @@ export default new Vuex.Store({
       const data = await res.json();
 
       context.commit("GET_SHOW_FULL_DATA", data);
-      context.commit("GET_SEASON_DATA", data._embedded.seasons);
-      context.commit("GET_EPISODES_DATA", data._embedded.episodes);
+    },
+
+    getSingleEpisode: async (context, { season, episode }) => {
+      try {
+        const res = await fetch(
+          `http://api.tvmaze.com/shows/530/episodebynumber?season=${season}&number=${episode}`
+        );
+        const data = await res.json();
+        if (data.status === 404) {
+          context.commit("SHOW_404");
+        } else {
+          context.commit("GET_SINGLE_EPISODE", data);
+        }
+      } catch (error) {
+        context.commit("SHOW_404");
+      }
+    }
+  },
+  getters: {
+    getShowSeasons: state => {
+      return state.showData._embedded.seasons;
+    },
+    getShowEpisodes: state => {
+      return state.showData._embedded.episodes;
+    },
+    getNumSeasons: state => {
+      return state.showData._embedded.seasons.length;
+    },
+    getSeasonEpisodes: state => numSeason => {
+      return state.showData._embedded.episodes.filter(
+        season => season.season === numSeason
+      );
     }
   }
 });

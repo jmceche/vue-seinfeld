@@ -5,9 +5,12 @@
 </template>
 
 <script>
+import { mapActions } from "vuex";
 export default {
+  name: "App",
+  methods: mapActions(["getShowData"]),
   created() {
-    this.$store.dispatch("getShowData");
+    this.getShowData();
   }
 };
 </script>

@@ -1,14 +1,14 @@
 <template>
   <Layout>
-    <div v-if="episode" class="episode-container">
+    <div v-if="singleEpisode" class="episode-container">
       <div class="left">
-        <img :src="`${episode.image.original}`" alt="cover_image" />
+        <img :src="`${singleEpisode.image.original}`" alt="cover_image" />
       </div>
       <div class="right">
-        <h1 class="episode-title">{{ episode.name }}</h1>
-        <h4>Duration: {{ episode.runtime }} min</h4>
-        <h4>Air Date: {{ episode.airdate }}</h4>
-        <p v-html="episode.summary" class="episode-summary"></p>
+        <h1 class="episode-title">{{ singleEpisode.name }}</h1>
+        <h4>Duration: {{ singleEpisode.runtime }} min</h4>
+        <h4>Air Date: {{ singleEpisode.airdate }}</h4>
+        <p v-html="singleEpisode.summary" class="episode-summary"></p>
         <a class="go-back" @click="$router.go(-1)">Go Back</a>
       </div>
     </div>
@@ -24,13 +24,23 @@ export default {
   components: { Layout },
 
   computed: {
-    ...mapState(["episodesData"]),
-
-    episode() {
-      console.log(this.$route.params.id);
-      return this.episodesData.filter(
-        episode => episode.id.toString() === this.$route.params.id.toString()
-      )[0];
+    ...mapState(["episodesData", "singleEpisode", "pageNotFound"])
+  },
+  created() {
+    const payload = {
+      season: this.$route.params.se,
+      episode: this.$route.params.ep
+    };
+    this.$store.dispatch("getSingleEpisode", payload);
+  },
+  watch: {
+    pageNotFound: {
+      immediate: false,
+      handler() {
+        if (this.pageNotFound) {
+          this.$router.push("/not-found");
+        }
+      }
     }
   }
 };
